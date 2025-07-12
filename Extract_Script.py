@@ -2,6 +2,7 @@ import requests
 import pandas as pd 
 import datetime
 import psycopg2
+from sqlalchemy import create_engine
 
 StartDate = datetime.datetime(2025, 1, 1)
 StopDate = datetime.datetime(2025, 7, 1)
@@ -43,7 +44,7 @@ database = 'neondb'
 sslmode = 'require'  # Neon requires SSL
 
 
-## Test connectiion 
+## Test connection  
 
 try:
     connection = psycopg2.connect(
@@ -64,4 +65,10 @@ except Exception as e:
 ##### pass the data into the Neno #####
 
 
+## Connection string 
+connection_string = "postgresql+psycopg2://neondb_owner:npg_0aLTWcGqE1AJ@ep-lively-term-abff86z3-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
+# Create engine and write data
+engine = create_engine(connection_string)
+resultlist.to_sql("covid_test", engine, schema="raw", if_exists="replace", index=False)
 
+print(" Data written to Neon!")
