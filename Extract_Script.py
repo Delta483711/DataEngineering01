@@ -1,36 +1,45 @@
+import requests 
+import pandas as pd 
+import datetime
+
+StartDate = datetime.datetime(2025, 1, 1)
+StopDate = datetime.datetime(2025, 7, 1)
 
 
-import requests
-import pandas as pd
+#Create a function to store the API Call 
+def get_uk_historical():
+    url = "https://disease.sh/v3/covid-19/historical/UK?lastdays=10"
+    response = requests.get(url)
 
-BASE_URL = 'https://api.covid19api.com'
-
-def get_covid19_data(country=None):
-    if country:
-        endpoint = f"{BASE_URL}/dayone/country/{country}"
-    else:
-        endpoint = f"{BASE_URL}/summary"
-        
-    response = requests.get(endpoint)
-    
+#Check if the Response was successful
     if response.status_code == 200:
-        return response.json()
+        result = response.json()
+        #Process the result
+         #Extract part of the JSON
+        timeline = result['timeline']
+        #Convert to dataFrames
+        cases_df = pd.DataFrame(timeline['cases'].items(), columns=['date', 'cases'])
+        deaths_df = pd.DataFrame(timeline['deaths'].items(), columns=['date', 'deaths'])
+        recovered_df = pd.DataFrame(timeline['recovered'].items(), columns=['date', 'recovered'])
+        df = cases_df.merge(deaths_df, on='date').merge(recovered_df, on='date')
+    
+        return df
     else:
-        raise Exception(f"Failed to fetch data: {response.status_code} - {response.text}")
+        ##Error message
+        print('Failed')
+        raise Exception(f"Failed to fetch data: {response.status_code}")
+    
 
-# Fetch global COVID-19 summary
-global_data = get_covid19_data()
-print("Global Summary:")
-print(global_data['Global'])
+resultlist = get_uk_historical()
 
-# Fetch country-specific COVID-19 data
-country_data = get_covid19_data(country="united-kingdom")
-print("\nUK Day One Data:")
-print(pd.DataFrame(country_data).head())
+print(resultlist)
 
 
+##### Connect to Neon 
 
 
-##https://www.omi.me/blogs/api-guides/how-to-fetch-covid-19-data-using-covid-19-api-in-python?srsltid=AfmBOoqV0tCWposskBXLRBZjlL6n3DwPz6Xhs1VWfeElHwXnqslh4dza
 
-##https://api.covidtracking.com
+        
+
+
+
