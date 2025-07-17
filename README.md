@@ -1,2 +1,3 @@
 # DataEngineering01
-This is the first real ETL project what will be used to showcase my skills. 
+
+This is the first full end-to-end ETL project that will be used to showcase my skills. 
