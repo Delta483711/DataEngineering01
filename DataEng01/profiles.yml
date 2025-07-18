@@ -1,0 +1,24 @@
+DataEng01:
+  outputs:
+    dev:
+      dbname: neondb
+      host: ep-lively-term-abff86z3-pooler.eu-west-2.aws.neon.tech
+      pass: npg_0aLTWcGqE1AJ
+      port: 5432
+      schema: raw
+      threads: 10
+      type: postgres
+      user: neondb_owner
+  target: dev
+timesheet_project:
+  outputs:
+    dev:
+      dbname: timesheet
+      host: ep-dry-fog-abmpr1uk-pooler.eu-west-2.aws.neon.tech
+      pass: npg_V4e1YiPmRjdc
+      port: 5432
+      schema: public
+      threads: 1
+      type: postgres
+      user: neondb_owner
+  target: dev
