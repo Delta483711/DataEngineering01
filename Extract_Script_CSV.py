@@ -11,8 +11,15 @@ df = pd.read_csv(StringIO(requests.get(url).text))
 
 ## Minor transform the csv file ##
 
+# Convert 'date' column to datetime format
+df['date'] = pd.to_datetime(df['date'])
+
+# Filter: Get rows after a specific date (e.g., after 2022-01-01)
+filtered_df = df[df['date'] > '2024-01-10']
+
 ## Limit the number of rows returned
-trimdata = df.head(50)
+trimdata = filtered_df.head(50)
+
 print(trimdata)
 
 ## store columns in var Test 
@@ -32,12 +39,12 @@ sslmode = 'require'  # Neon requires SSL
 ConnectionToDatabase(username,password,host,port,database,sslmode)
 
 ## Save to database 
-connection_string = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}?sslmode={sslmode}"
-engine = create_engine(connection_string)
+##connection_string = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}?sslmode={sslmode}"
+##engine = create_engine(connection_string)
 
-trimdata.to_sql("CovidCSVTest", engine, schema="raw", if_exists="replace", index=False)
+##trimdata.to_sql("CovidCSVTest", engine, schema="raw", if_exists="replace", index=False)
 
-print(" Data written to Neon!")
+##print(" Data written to Neon!")
 
 
 
