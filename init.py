@@ -16,6 +16,8 @@ def ConnectionToDatabase(username,password,host,port,database,sslmode):
             sslmode=sslmode
         )
         print("Successfully connected to Neon PostgreSQL!")
+
         connection.close()
     except Exception as e:
         print(" Connection failed:", e)
+

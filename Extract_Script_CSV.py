@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 from io import StringIO
 from init import ConnectionToDatabase
-import os 
+from sqlalchemy import create_engine
 
 ## Read the csv file 
 url = "https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/owid-covid-data.csv"
@@ -17,7 +17,6 @@ print(trimdata)
 
 ## store columns in var Test 
 date = trimdata["date"]
-print(date)
 
 ##### Connect to Neon or any other database ######
 
@@ -33,4 +32,21 @@ sslmode = 'require'  # Neon requires SSL
 ConnectionToDatabase(username,password,host,port,database,sslmode)
 
 ## Save to database 
+connection_string = f"postgresql+psycopg2://{username}:{password}@{host}:{port}/{database}?sslmode={sslmode}"
+engine = create_engine(connection_string)
 
+trimdata.to_sql("CovidCSVTest", engine, schema="raw", if_exists="replace", index=False)
+
+print(" Data written to Neon!")
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
